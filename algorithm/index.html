@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+
+    function generateNextArray(pattern) {
+        let next = [];
+        for (let j = 1; j <= pattern.length; j++) {
+            if (j === 1) {
+                next[j - 1] = 0;
+                continue;
+            }
+            if (j === 2) {
+                next [j - 1] = 1;
+                continue;
+            }
+            for (let k = j - 1; k > 1; k--) {
+                let prefix = pattern.substr(0, k - 1);
+                let suffix = pattern.substr(j - k, k - 1);
+                if (prefix === suffix) {
+                    next[j - 1] = k;
+                }
+            }
+            if (!next[j - 1]) {
+                next[j - 1] = 1;
+            }
+
+        }
+        return next;
+    }
+
+    function KMP(str, pattern) {
+        var next = generateNextArray(pattern);
+//        next.shift();
+        // 这里还没想好.....如何表征"滑动"
+        let i = 0;
+        let j = 0;
+        while (str[i] && pattern[j]) {
+            if (j === 0 || str[i] === pattern[j]) {
+                i++;
+                j++;
+            } else {
+                j = next[j];
+            }
+        }
+        if (j > pattern.length) {
+            return i = pattern.length;
+        } else {
+            return 0;
+        }
+    }
+
+    let str = "acabaabaabcacaabc";
+    let pattern = "abaabcac";
+
+    let next = generateNextArray(pattern);
+    console.log('next', next);
+
+    var res = KMP(str, pattern);
+    console.log('res', res);
+
+
+</script>
+</body>
+</html>
